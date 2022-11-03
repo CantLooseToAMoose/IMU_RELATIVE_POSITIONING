@@ -1,0 +1,10 @@
+data1/imu1.csv
+data1/imu2.csv
+data1/imu3.csv
+data1/imu4.csv
+data1/imu5.csv
+data2/imu1.csv
+data2/imu2.csv
+data2/imu3.csv
+data2/imu4.csv
+data2/imu5.csv

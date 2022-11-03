@@ -1,0 +1,7 @@
+data1/imu1.csv
+data1/imu2.csv
+data1/imu3.csv
+data1/imu4.csv
+data1/imu5.csv
+data1/imu6.csv
+data1/imu7.csv

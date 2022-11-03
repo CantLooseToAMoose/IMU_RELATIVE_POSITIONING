@@ -1,0 +1,11 @@
+TODO:
+model architektur bi-direktional, timedistributed dense am anfang, mehr units (wie im paper)
+
+pp bei radius kleiner epsilon winkel null
+
+testen auf den extra testdaten
+
+Future:
+weiterer winkel(quaternions)
+
+
