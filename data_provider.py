@@ -53,7 +53,7 @@ def load_polar_vector_array_for_one_data_file(vico, window_size, offset=0):
 
 def load_sensor_data_array_for_one_data_file(sensor_data, window_size, offset=0):
     sensor_data = sensor_data.to_numpy()
-    sensor_data = sensor_data[offset:-1, 1:]
+    sensor_data = sensor_data[offset:-1, [4,5,6,12,13,14]]
     cutoff = len(sensor_data) % window_size
     features = len(sensor_data[0])
     if cutoff != 0:

@@ -50,7 +50,7 @@ def evaluate_polar_test(y_pred, Y_test, plot=False):
     return np.array([mean_r, std_r, minimum_r, maximum_r])
 
 
-def naive_lstm_workflow_for_one_experiment(datapath, train, plot, seq_length, stride, layers=[300, 100, 100]):
+def naive_lstm_workflow_for_one_experiment(datapath, train, plot, seq_length, stride, number_of_features=6, lstm_layers=[300, 100, 100]):
     polar, imu = data_provider.load_imu_and_polar_vector_list_of_lists_for_one_experiment(
         datapath, window_size=seq_length, stride=stride)
     testing.test_if_preprocessing_is_working_for_every_file_in_experiment(
@@ -58,19 +58,19 @@ def naive_lstm_workflow_for_one_experiment(datapath, train, plot, seq_length, st
     polar, imu = data_provider.convert_list_of_lists_of_data_from_one_experiment_to_2D_numpy_array(polar, imu)
     # scaler_imu = StandardScaler()
     X_train, X_test, Y_train, Y_test = train_test_split(imu, polar, test_size=0.3, shuffle=True, random_state=42)
-    X_train = X_train.reshape(-1, 15)
+    X_train = X_train.reshape(-1, number_of_features)
     # X_train = scaler_imu.fit_transform(X_train)
-    X_train = X_train.reshape(-1, seq_length, 15)
-    X_test = X_test.reshape(-1, 15)
+    X_train = X_train.reshape(-1, seq_length, number_of_features)
+    X_test = X_test.reshape(-1, number_of_features)
     # X_test = scaler_imu.transform(X_test)
-    X_test = X_test.reshape(-1, seq_length, 15)
+    X_test = X_test.reshape(-1, seq_length, number_of_features)
     X_train, X_val, Y_train, Y_val = train_test_split(X_train, Y_train, test_size=0.3, shuffle=True, random_state=42)
-    input_shape = [seq_length, 15]
+    input_shape = [seq_length, number_of_features]
     model_file_path = 'models\\models_lstm\\model_polar_with_stride_' + str(stride) + "_layers_" + layers_toString(
-        layers) + "_seq_length_" + str(
+        lstm_layers) + "_seq_length_" + str(
         seq_length) + '.hdf5'
-    model, checkpoint = model_provider.get_lstm_model(layers, input_shape, model_file_path,
-                                                      sequence_to_sequence=False)
+    model, checkpoint = model_provider.get_td_dense_lstm_dense_model(td_dense_layers=[128],lstm_layers=lstm_layers,dense_layers=[256], input_shape=input_shape, model_file_path=model_file_path,n_out=2,
+                                                                     sequence_to_sequence=False)
 
     if (train):
         model.fit(X_train, Y_train, epochs=50, batch_size=64, validation_data=(X_val, Y_val), callbacks=[checkpoint])
