@@ -4,6 +4,8 @@ import data_provider
 import lib
 import matplotlib
 
+import model_provider
+
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import testing
@@ -17,6 +19,7 @@ pred, test, eval, model = workflow.naive_lstm_workflow_for_one_experiment("Oxfor
                                                                           train=True, plot=True,
                                                                           seq_length=200, stride=10,
                                                                           lstm_layers=[128, 256])
+
 # print(np.ptp(pred, axis=0))
 # print(np.ptp(test, axis=0))
 Y, X = data_provider.load_sensor_and_polar_vector_list_for_one_data_folder(

@@ -1,6 +1,7 @@
 import tensorflow as tf
-
+import numpy as np
 from tensorflow import keras
+import math
 
 
 def own_mse_loss(y_true, y_pred):
@@ -9,6 +10,15 @@ def own_mse_loss(y_true, y_pred):
 
 def own_sum_loss(y_true, y_pred):
     return tf.math.reduce_sum(tf.square(y_true - y_pred))
+
+
+def own_angle_sum_loss(y_true, y_pred):
+    tensor_pi = [0, 2 * math.pi]
+    y_pred_1 = tf.add(y_pred, tensor_pi)
+    y_pred_2 = tf.subtract(y_pred, tensor_pi)
+    return tf.reduce_min(tf.stack(
+        [tf.math.reduce_sum(tf.square(y_true - y_pred)), tf.math.reduce_sum(tf.square(y_true - y_pred_1)),
+         tf.math.reduce_sum(tf.square(y_true - y_pred_2))]))
 
 
 def get_td_dense_lstm_dense_model(td_dense_layers, lstm_layers, dense_layers, input_shape, model_file_path, n_out,
@@ -39,7 +49,7 @@ def get_td_dense_lstm_dense_model(td_dense_layers, lstm_layers, dense_layers, in
         for i in range(len(dense_layers)):
             model.add(keras.layers.Dense(dense_layers[i], activation="relu"))
         model.add(keras.layers.Dense(n_out))
-    model.compile(loss=own_sum_loss, optimizer="adam")
+    model.compile(loss=own_angle_sum_loss, optimizer="adam")
     checkpoint = keras.callbacks.ModelCheckpoint(model_file_path,
                                                  monitor='val_loss',
                                                  save_best_only=True,
@@ -79,7 +89,7 @@ def get_bi_td_dense_lstm_dense_model(td_dense_layers, lstm_layers, dense_layers,
         for i in range(dense_layers):
             model.add(keras.layers.Dense(dense_layers[i], activation="relu"))
         model.add(keras.layers.Dense(n_out))
-    model.compile(loss=own_sum_loss, optimizer="adam")
+    model.compile(loss=own_angle_sum_loss, optimizer="adam")
     checkpoint = keras.callbacks.ModelCheckpoint(model_file_path,
                                                  monitor='val_loss',
                                                  save_best_only=True,
