@@ -54,7 +54,7 @@ def naive_lstm_workflow_for_one_experiment(datapath, train, plot, seq_length, st
     polar, imu = data_provider.load_imu_and_polar_vector_list_of_lists_for_one_experiment(
         datapath, window_size=seq_length, stride=stride)
     testing.test_if_preprocessing_is_working_for_every_file_in_experiment(
-        datapath, window_size=seq_length, stride=stride, plot=False)
+        datapath, window_size=seq_length, stride=stride, plot=True)
     polar, imu = data_provider.convert_list_of_lists_of_data_from_one_experiment_to_2D_numpy_array(polar, imu)
     # scaler_imu = StandardScaler()
     X_train, X_test, Y_train, Y_test = train_test_split(imu, polar, test_size=0.3, shuffle=True, random_state=42)

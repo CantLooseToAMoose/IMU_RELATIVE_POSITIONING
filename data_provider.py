@@ -39,7 +39,7 @@ def load_sensor_and_polar_vector_list_for_one_data_folder(path, window_size, str
     return polar_list, imu_list
 
 
-def load_polar_vector_array_for_one_data_file(vico, window_size, offset=0):
+def load_polar_vector_array_for_one_data_file(vico, window_size, offset=0, epsilon_radius=0.02):
     vico = vico.to_numpy()
     pos = vico[offset::window_size, [2, 3]]
     delta_vector = np.subtract(pos[1:], pos[:-1])
@@ -47,6 +47,7 @@ def load_polar_vector_array_for_one_data_file(vico, window_size, offset=0):
     headings = np.zeros((len(delta_vector)))
     headings[0] = np.arctan2(delta_vector[0, 1], delta_vector[0, 0])
     headings[1:] = lib.AngleToTheLastVector(delta_vector)
+    headings[delta_loc < epsilon_radius] = 0
     return np.concatenate([delta_loc.reshape(-1, 1), headings.reshape(-1, 1)], axis=1)
 
 

@@ -16,7 +16,7 @@ import tensorflow as tf
 #     "Oxford Inertial Odometry Dataset/handheld", window_size=100,stride=10)
 
 pred, test, eval, model = workflow.naive_lstm_workflow_for_one_experiment("Oxford Inertial Odometry Dataset/handheld",
-                                                                          train=True, plot=True,
+                                                                          train=False, plot=True,
                                                                           seq_length=200, stride=10,
                                                                           lstm_layers=[128, 256])
 
